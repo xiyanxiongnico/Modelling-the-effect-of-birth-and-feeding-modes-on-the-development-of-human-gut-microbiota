@@ -4,6 +4,6 @@ The 'competition model.R' and 'extended model.R' are the two versions of the mat
 The R files with names start with 'data_' call the above model files to generate data. 
 The 'nullclines plot.nb' is a mathematica file that generates the nullcline plots for the competitin model.
 The 'plots.R' file plot the generated data.
-The 'compare quasi vs full model against alpha and h' and 'compare quasi vs full model dynamics' generate plots to estimate the accuracy of the quasi-steady-state approximation.
+The 'compare quasi vs full model against alpha and h' and 'compare quasi vs full model dynamics' files generate plots to estimate the accuracy of the quasi-steady-state approximation.
 
 
