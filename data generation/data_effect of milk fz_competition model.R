@@ -1,3 +1,4 @@
+# This script generates the equilibria of the competition model against a range of various levels of breast milk.
 
 source("competition model.R")
 
