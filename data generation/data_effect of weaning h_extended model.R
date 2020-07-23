@@ -1,3 +1,4 @@
+# This script generates the equilibria of the extended model against a range of weaning schedules. 
 
 source("extended model.R")
 
