@@ -1,3 +1,5 @@
+# This script generate the ratio of log(B2/B3) at equilibria for the extended model against combinations of feeding practices and environmental supply. 
+
 library(dplyr)
 
 # create parameter space -----------------------------------------
