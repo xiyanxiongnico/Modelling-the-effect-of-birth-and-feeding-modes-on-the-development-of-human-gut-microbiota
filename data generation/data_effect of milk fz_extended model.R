@@ -1,3 +1,4 @@
+# This script generates the equilibria of the extended model against various breast milk levels. 
 
 source("extended model.R")
 
