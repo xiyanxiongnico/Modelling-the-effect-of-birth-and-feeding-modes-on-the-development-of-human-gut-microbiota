@@ -1,3 +1,4 @@
+# This file contains scripts used to generate plots for the competition model and the extended model. 
 
 # plot effect of initial condition for competition model  ----------------------------------------
 
