@@ -1,3 +1,5 @@
+# This script plot and compare the equilibria of the quasi-steady-state approximation with that of the full model against various levels of competition and feeding practices.
+
 # full momdel and quasi steady state approximation ----------------
 full_model <- function(t,y,P){
   B_1 <- y[1] #bifidobacteria capable of HMO metabolism
