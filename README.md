@@ -3,7 +3,8 @@ This repository contains source files for the project: Modelling the effect of b
 The source code for this project are in the 'code' folder, which include the code for the mathematical models, and data and plot generation. 
 The 'competition model.R' and 'extended model.R' in the 'model' folder are the two versions of the mathematical models we created. 
 Scripts in the 'data generation' folder use these mathematical models to generate data ready for plotting. 
-The 'plot generation' folder contains scripts used to generate the plots, which are stored in the 'plot' folder. 
+The 'plot generation' folder contains scripts used to generate the plots.
+All plots stored in the 'plot' folder. 
 
 
 
