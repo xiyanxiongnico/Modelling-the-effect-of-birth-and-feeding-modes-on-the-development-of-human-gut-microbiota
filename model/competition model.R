@@ -1,3 +1,5 @@
+# This is a function for the competition model, which consists of three ordinary differential equations (one for each bacterial population) and a function representing the level of milk in diet Z(t). 
+
 competition<-function(t,y,p){
   B_1 <- y[1] #bifidobacteria capable of HMO metabolism
   B_2 <- y[2] #bifidobacteria capable of plant polysaccharide metabolism 
