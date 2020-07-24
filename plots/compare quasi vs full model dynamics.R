@@ -1,3 +1,5 @@
+# This script plot and compare the dynamics of the quasi-steady-state approximation and the full model.
+
 # full momdel ----------------
 full_model <- function(t,y,P){
   B_1 <- y[1] #bifidobacteria capable of HMO metabolism
