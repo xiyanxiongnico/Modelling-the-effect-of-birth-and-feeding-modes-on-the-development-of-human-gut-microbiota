@@ -1,3 +1,4 @@
+# This is a function for the extended model, which consists of four ordinary differential equations (three bacterial populations and an immune factor) and a function representing the level of milk in diet Z(t).
 
 competition<-function(t,y,p){
   B_1 <- y[1] #bifidobacteria capable of HMO metabolism
