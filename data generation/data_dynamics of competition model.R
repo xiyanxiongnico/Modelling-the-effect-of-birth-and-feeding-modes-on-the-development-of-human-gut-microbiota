@@ -1,4 +1,4 @@
-# This script generate the temporal dynamics of the competition model using the baseline parameters. 
+# This script generate the temporal dynamics of the competition model using baseline parameters. 
 
 source("competition model.R")
 
