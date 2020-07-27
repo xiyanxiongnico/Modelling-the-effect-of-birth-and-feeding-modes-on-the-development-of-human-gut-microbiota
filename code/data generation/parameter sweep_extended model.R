@@ -4,7 +4,7 @@
 library(dplyr)
 
 # make directory for saving data 
-output_heatmap <- "data_pspace_fz_h.rData"
+output_heatmap <- "data/data_pspace_fz_h.rData"
 
 # create parameter space -----------------------------------------
 k <- 1000
