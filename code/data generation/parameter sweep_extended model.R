@@ -1,6 +1,10 @@
-# This script generate the ratio of log(B2/B3) at equilibria for the extended model against combinations of feeding practices and bacteria supply from the environment. 
+# This script generate the ratio of log(B2/B3) at equilibria for the extended model 
+# against combinations of feeding practices and bacteria supply from the environment. 
 
 library(dplyr)
+
+# make directory for saving data 
+output_heatmap <- "data_pspace_fz_h.rData"
 
 # create parameter space -----------------------------------------
 k <- 1000
@@ -20,7 +24,7 @@ CS <- c(1,1,50)/k
 VB <- c(50,50,1)/k
 
 # run model in parameter space ------------------------------------
-source("extended model.R")
+source("../model/extended model.R")
 
 library(deSolve)
 
@@ -64,10 +68,10 @@ repeat {
          alpha_c=alpha_c,gamma=gamma,mu_b=mu_b,mu_c=mu_c) 
   
   
-  # initial conditions 
-   b1_0 <- CS[1]
-   b2_0 <- CS[2]
-   b3_0 <- CS[3]
+  # initial conditions for c-section
+  b1_0 <- CS[1]
+  b2_0 <- CS[2]
+  b3_0 <- CS[3]
   y0 <- c(B_1 = b1_0, B_2 = b2_0, B_3 = b3_0, M = 1/k) 
   
   # print pSpace row employed at each run
@@ -92,11 +96,14 @@ repeat {
 
 # join pSpace with output_pSpace 
 output_pSpace <- cbind(output_pSpace,pSpace)
+
 # calculate log(B2/B3) for each run and add it as a new column 
 output_pSpace$Ratio <- log10(output_pSpace$B_2/output_pSpace$B_3)
 
+# convert into factor 
 output_pSpace$f2 <- as.factor(output_pSpace$f2)
 output_pSpace$f3 <- as.factor(output_pSpace$f3)
 
-save(output_pSpace,file = "data_pspace_fz_h_c-section.rData")
+# save the data 
+save(output_pSpace,file = output_heatmap)
 

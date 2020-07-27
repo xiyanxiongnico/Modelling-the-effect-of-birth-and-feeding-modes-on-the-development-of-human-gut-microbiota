@@ -1,10 +1,16 @@
 # This script generates the equilibria of the competition model against a range of various levels of breast milk.
 
-source("competition model.R")
+# call competition model
+source("../model/competition model.R")
 
+# make directory for saving data 
+output_fz_vaginal <- "data/f_z_vaginal_without_M.rData"
+output_fz_csection <- "data/f_z_c-section_without_M.rData"
 
 # make an empty dataframe 
-df_fz <- data.frame()
+df_fz_csection <- data.frame()
+df_fz_vaginal <- data.frame()
+
 
 # parameters --------------------------------------------------------------
 library(deSolve)
@@ -44,21 +50,24 @@ repeat {
   
   
   # initial conditions for c-section
-  # y0 <- c(B_1 = 1/k,B_2 = 1/k,B_3 = 50/k) 
+   y0_csection <- c(B_1 = 1/k,B_2 = 1/k,B_3 = 50/k) 
   
   # initial conditions for vaginal
-   y0 <- c(B_1 = 50/k, B_2 = 50/k, B_3 = 1/k) 
+   y0_vaginal <- c(B_1 = 50/k, B_2 = 50/k, B_3 = 1/k) 
   
   # times
   times <- seq(0,1000,1)
   
   # solve ode and save as data frame
-  output <- data.frame(ode(y = y0, times, competition, p))
+  output_csection <- data.frame(ode(y = y0_csection, times, competition, p))
+  output_vaginal <- data.frame(ode(y = y0_vaginal, times, competition, p))
   
-  output$f_z <- f_z
+  output_csection$f_z <- f_z
+  output_vaginal$f_z <- f_z
   
   # add the last row of output to df 
-  df_fz <- rbind(df_fz, output[length(output$time),2:5])
+  df_fz_csection <- rbind(df_fz_csection, output_csection[length(output_csection$time),2:5])
+  df_fz_vaginal <- rbind(df_fz_vaginal, output_vaginal[length(output_vaginal$time),2:5])
   
   
   # repeat to run the function 
@@ -68,7 +77,8 @@ repeat {
   }
 }
 
- save(df_fz,file = "f_z_vaginal_without_M.rData")
-# save(df_fz,file = "f_z_c-section_without_M.rData")
+# save the data 
+save(df_fz_vaginal,file = output_fz_vaginal)
+save(df_fz_csection,file = output_fz_csection)
 
 

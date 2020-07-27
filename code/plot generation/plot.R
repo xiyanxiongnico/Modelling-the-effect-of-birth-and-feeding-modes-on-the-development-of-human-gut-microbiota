@@ -5,16 +5,21 @@
 output_initial_conditions <- "plots/initial_conditions_competition_model.pdf"
 output_feeding_extendedModel <- "plots/f_z_h_compareBirthMode.pdf"
 output_nullclines <- "plots/nullclines.pdf"
+output_dynamics <- "plots/dynamics_competition.pdf"
+output_Z <- "plots/z.pdf"
+output_fz_competition <- "plots/Bifidobacteria_input_competition_model.pdf"
+output_heatmap <- "plots/pSpace_f_z_c-section.pdf"
 
-# plot effect of initial condition for competition model  ----------------------------------------
-
-# load data 
-load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/initial conditions.rdata")
-
-
+# library for plot
 library(ggplot2)
+# The effect of a range of initial conditions in the competition model 
+library(tidyr)
+# to access break formatting functions
+library(scales) 
+# put multiple plots in the same panel 
+library(ggpubr)
 
-# set my theme
+# set my theme for plot 
 mytheme <- theme_bw() + 
   theme(panel.grid.minor =  element_blank(),
         plot.title = element_text(size = 15),
@@ -25,16 +30,18 @@ mytheme <- theme_bw() +
         legend.position = "none") 
 
 
-# The effect of a range of initial conditions in the competition model 
-library(tidyr)
-# to access break formatting functions
-library(scales) 
+# plot effect of initial condition for competition model  ----------------------------------------
 
+# load data 
 
+load("../data generation/data/initial conditions.rdata")
+
+# format data frame 
 df_initial$new <- (df_initial$B_2_init+df_initial$B_1_init)/df_initial$B_3_init
 colnames(df_initial)[colnames(df_initial)=="new"] <- "ratio"
 df_long <- gather(df_initial,Variables,values,B_2:B_3,factor_key=TRUE)
 
+# make plot 
 initialconditions_plot <-  ggplot(data = df_long, aes(x = ratio, y = values, color = Variables)) + 
   geom_line(size = 0.8,aes(linetype=Variables)) + 
   scale_linetype_manual(values=c("solid","dashed"),
@@ -52,6 +59,7 @@ initialconditions_plot <-  ggplot(data = df_long, aes(x = ratio, y = values, col
 
 show(initialconditions_plot)
 
+# save plot 
 ggsave(file= output_initial_conditions, width = 12, height = 8.5, units = "cm")
 
 
@@ -60,26 +68,8 @@ ggsave(file= output_initial_conditions, width = 12, height = 8.5, units = "cm")
 # Plot effect of feeding practices in the extended model -----------------------------------------------
 
 # load data 
-load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/f_z vaginal.rdata")
-load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/f_z c-section.rdata")
-load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/h_vaginal.rdata")
-load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/h_c-section.rData.rdata")
+load("../data generation/data/f_z vaginal.rdata")
 
-
-library(tidyr)
-# to access break formatting functions
-library(scales) 
-library(ggplot2)
-
-# set my theme
-mytheme <- theme_bw() + 
-  theme(panel.grid.minor =  element_blank(),
-        plot.title = element_text(size = 15),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14),
-        legend.position = "none") 
 
 # plot f_z
 df_long <- gather(df_fz,Variables,Values,B_2:M,factor_key=TRUE)
@@ -107,10 +97,12 @@ f_z_vaginal <-  ggplot(data = df_long, aes(x = f_z, y = Values)) +
   
 show(f_z_vaginal)
 
+# load data 
+load("../data generation/data/f_z c-section.rdata")
+
 
 df_long <- gather(df_fz,Variables,Values,B_2:M,factor_key=TRUE)
-#source("myTheme.R")
-library(ggplot2)
+
 f_z_c_section <-  ggplot(data = df_long, aes(x = f_z, y = Values)) + 
   geom_line(size = 0.8,aes(linetype=Variables,color=Variables)) + 
   scale_linetype_manual(values=c("solid","dashed","dotted"),
@@ -137,8 +129,12 @@ show(f_z_c_section)
 
 # plot h
 
+#load data 
+load("../data generation/data/h_vaginal.rdata")
+
+
 df_long <- gather(df_h,Variables,Values,B_2:M,factor_key=TRUE)
-library(ggplot2)
+
 h_vaginal <-  ggplot(data = df_long, aes(x = h, y = Values)) + 
   geom_line(size = 1,aes(linetype=Variables,color=Variables)) + 
   scale_linetype_manual(values=c("solid", "dashed","dotted"),
@@ -160,8 +156,12 @@ h_vaginal <-  ggplot(data = df_long, aes(x = h, y = Values)) +
 show(h_vaginal)
 
 
+# load data 
+load("../data generation/data/h_c-section.rdata")
+
+
 df_long <- gather(df_h,Variables,Values,B_2:M,factor_key=TRUE)
-library(ggplot2)
+
 h_c_section <-  ggplot(data = df_long, aes(x = h, y = Values)) + 
   geom_line(size = 1,aes(linetype=Variables,color=Variables)) + 
   scale_linetype_manual(values=c("solid", "dashed","dotted"),
@@ -181,8 +181,7 @@ h_c_section <-  ggplot(data = df_long, aes(x = h, y = Values)) +
 
 show(h_c_section)
 
-# put four plot together 
-library(ggpubr)
+
 
 f_z_h_compareBirthMode <- ggarrange(f_z_vaginal, f_z_c_section,h_vaginal, h_c_section, 
                                 labels = c("A", "B","C","D"), nrow = 2, ncol = 2)
@@ -193,7 +192,7 @@ ggsave(file = output_feeding_extendedModel, width = 17, height = 17, units = "cm
 
 
 # plot nullclines of B2 and B3 for competition model --------------------------------------------------------
-library(ggplot2)
+
 library(png)
 library(grid)
 library(cowplot)
@@ -217,24 +216,11 @@ dev.off()
 
 # plot longitudinal dynamics of competition model ----------------------------------------------
 
-# set my theme
-mytheme <- theme_bw() + 
-  theme(panel.grid.minor =  element_blank(),
-        plot.title = element_text(size = 15),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14),
-        legend.position = "none") 
+# load data
+load("../data generation/data/dynamics_competition_vaginal.rData")
 
-library(tidyr)
-# to access break formatting functions
-library(scales) 
-library(ggplot2)
-
-load("dynamics_competition_vaginal.rdata")
-
-dynamics_competition_vaginal <- ggplot(data = bacteria_melt, aes(x = time, y = value,
+# make plot 
+dynamics_competition_vaginal <- ggplot(data = bacteria_melt_vaginal, aes(x = time, y = value,
                                                                  color = variable)) + 
   geom_line(size = 0.8, aes(linetype=variable)) + 
   scale_linetype_manual(values=c("twodash", "solid", "dashed"),
@@ -256,9 +242,11 @@ dynamics_competition_vaginal <- ggplot(data = bacteria_melt, aes(x = time, y = v
 
 show(dynamics_competition_vaginal)
 
-load("dynamics_competition_c-section.rdata")
+# load data 
+load("../data generation/data/dynamics_competition_c-section.rData")
 
-dynamics_competition_c_section <- ggplot(data = bacteria_melt, aes(x = time, y = value,
+# make plot 
+dynamics_competition_c_section <- ggplot(data = bacteria_melt_csection, aes(x = time, y = value,
                                                                  color = variable)) + 
   geom_line(size = 0.8, aes(linetype=variable)) + 
   scale_linetype_manual(values=c("twodash", "solid","dashed"),
@@ -280,13 +268,13 @@ dynamics_competition_c_section <- ggplot(data = bacteria_melt, aes(x = time, y =
 
 show(dynamics_competition_c_section)
 
-library(ggpubr)
-
+# put plots in the same panel
 dynamics_competition <- ggarrange(dynamics_competition_vaginal, dynamics_competition_c_section, 
                                     labels = c("A", "B"), nrow = 1, ncol = 2)
 show(dynamics_competition)
 
-ggsave("dynamics_competition.pdf",width = 17, height = 8.5, units = "cm")
+# save the plot 
+ggsave(file = output_dynamics, width = 17, height = 8.5, units = "cm")
 
 
 
@@ -294,8 +282,7 @@ ggsave("dynamics_competition.pdf",width = 17, height = 8.5, units = "cm")
 
 # plot proportion of milk in infant diet Z(t) ------------------------------------------------------------------
 # set my theme
-library(ggplot2)
-mytheme <- theme_bw() + 
+mytheme_z <- theme_bw() + 
   theme(panel.grid.minor =  element_blank(),
         axis.text.x = element_text(size = 12),
         axis.text.y = element_text(size = 12),
@@ -303,52 +290,37 @@ mytheme <- theme_bw() +
         axis.title.y = element_text(size = 12),
         legend.text = element_text (size = 12),
         legend.title = element_blank())
-# competition model 
-library(tidyr)
-# to access break formatting functions
-library(scales) 
 
+# variable values for Z(t) function
 w <- 0.014; h <- 500
 t <-  seq(0,1000,1)
 Z <- 1/(1 + exp(w*(t - h))) 
 
+# make a data frame for plot 
 z.data <- data.frame(Z,t)
 
-library(ggplot2)
+# plot Z(t)
 z.plot <- ggplot(data = z.data, aes(x = t, y = Z)) +
   geom_line(size = 1, color = "steelblue") +
-  mytheme + 
+  mytheme_z + 
   labs( x = "Time (days)", y = "Proportion of milk in diet (Z)")
 
 show(z.plot)
 
-ggsave(file="z.pdf",width = 8.5, height = 8.5, units = "cm")
+# save the plot 
+ggsave(file= output_Z, width = 8.5, height = 8.5, units = "cm")
 
 
 
 
 # plot effect of breast milk f_z for the competition Model  --------------------------------
 
-library(ggplot2)
+# load data 
+load("../data generation/data/f_z_vaginal_without_M.rdata")
 
-# set my theme
-mytheme <- theme_bw() + 
-  theme(panel.grid.minor =  element_blank(),
-        plot.title = element_text(size = 15),
-        axis.text.x = element_text(size = 12),
-        axis.text.y = element_text(size = 12),
-        axis.title.x = element_text(size = 14),
-        axis.title.y = element_text(size = 14),
-        legend.position = "none") 
+# make plot 
+df_long <- gather(df_fz_vaginal,Variables,Values,B_2:B_3,factor_key=TRUE)
 
-# Plot  f_z 
-library(tidyr)
-# to access break formatting functions 
-library(scales) 
-
-load("f_z_vaginal_without_M.rdata")
-df_long <- gather(df_fz,Variables,Values,B_2:B_3,factor_key=TRUE)
-library(ggplot2)
 f_z_vaginal <-  ggplot(data = df_long, aes(x = f_z, y = Values)) + 
   geom_line(size = 0.8,aes(linetype=Variables,color=Variables)) + 
   scale_linetype_manual(values=c("solid","dashed"),
@@ -370,10 +342,12 @@ f_z_vaginal <-  ggplot(data = df_long, aes(x = f_z, y = Values)) +
 show(f_z_vaginal)
 
 
-load("f_z_c-section_without_M.rdata")
-df_long <- gather(df_fz,Variables,Values,B_2:B_3,factor_key=TRUE)
+# load data 
+load("../data generation/data/f_z_c-section_without_M.rdata")
 
-library(ggplot2)
+# make plot 
+df_long <- gather(df_fz_csection,Variables,Values,B_2:B_3,factor_key=TRUE)
+
 f_z_c_section <-  ggplot(data = df_long, aes(x = f_z, y = Values)) + 
   geom_line(size = 0.8,aes(linetype=Variables,color=Variables)) + 
   scale_linetype_manual(values=c("solid","dashed"),
@@ -394,26 +368,22 @@ f_z_c_section <-  ggplot(data = df_long, aes(x = f_z, y = Values)) +
 
 show(f_z_c_section)
 
-# plot f_z
-# combine plots
-library(ggpubr)
+
+# put plots in the same panel
+
 f_z <- ggarrange(f_z_vaginal, f_z_c_section, 
                   labels = c("A", "B"), nrow = 1, ncol = 2)
 show(f_z)
 
-ggsave("Bifidobacteria_input_competition_model.pdf",width = 17, height = 8.5, units = "cm")
-
-
+ggsave(file = output_fz_competition, width = 17, height = 8.5, units = "cm")
 
 
 
 # plot the effect of feeding practice and environmental supply for extended model -----------------------------------------------
 # heatmap
 
-library(ggplot2)
-
-
-load("data_pspace_fz_h_c-section.rData")
+# load data 
+load("../data generation/data/data_pspace_fz_h.rData")
 
 output_pSpace$f2 <- factor(output_pSpace$f2, labels=c("f[2]: 0.001", "f[2]: 0.01", "f[2]: 0.02",
                                                       "f[2]: 0.03","f[2]: 0.05"))
@@ -421,7 +391,7 @@ output_pSpace$f2 <- factor(output_pSpace$f2, labels=c("f[2]: 0.001", "f[2]: 0.01
 output_pSpace$f3 <- factor(output_pSpace$f3, labels=c("f[3]: 0.001", "f[3]: 0.01", "f[3]: 0.02",
                                                       "f[3]: 0.03","f[3]: 0.05"))
 
-
+# make plot
 ggplot(output_pSpace, aes(f_z, h, fill= Ratio)) + geom_tile()+
   facet_grid(f3 ~ f2,labeller = label_parsed) + 
   scale_fill_gradient(low="yellow", high="blue") +
@@ -437,7 +407,7 @@ ggplot(output_pSpace, aes(f_z, h, fill= Ratio)) + geom_tile()+
   labs( x = bquote("Bifidobacteria in milk, " ~ f[z]), y = "Half-life of milk, h (Days)") 
 
 
-ggsave(file="pSpace_f_z_c-section.pdf",height = 14,width = 17,units = "cm")
+ggsave(file = output_heatmap, height = 14,width = 17,units = "cm")
 
 
 

@@ -1,7 +1,7 @@
 # This script generates the equilibria of the competition model against a range of initial conditions. 
 
 # call competition model
-source("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/model/competition model.R")
+source("../model/competition model.R")
 
 # set directory to store the generated data 
 output_initial_conditions <- "data/initial conditions.rData"
