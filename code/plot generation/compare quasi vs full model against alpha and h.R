@@ -1,5 +1,11 @@
 # This script plot and compare the equilibria of the quasi-steady-state approximation with that of the full model against various levels of competition and feeding practices.
 
+
+# set directory for plots 
+output_plot_h <- "plots/full_and_quasi_equilibira_against_h.pdf"
+output_plot_alpha <- "plots/full_and_quasi_equilibira_gainst_alpha.pdf"
+
+
 # full momdel and quasi steady state approximation ----------------
 full_model <- function(t,y,P){
   B_1 <- y[1] #bifidobacteria capable of HMO metabolism
@@ -12,13 +18,13 @@ full_model <- function(t,y,P){
   
   with(as.list(p),{
     # the grow rate of B1 related to milk consumption
-    dB_1dt <- r*B_1*(Z - (B_1 + B_2 + alpha*B_3)) + f_z*Z/k
+    dB_1dt <- r*B_1*(Z - (B_1 + B_2 + alpha*B_3)) + f_z*Z
     # the grow rate of B2 related to solid food consumption
     # competition between B2 & B2, B2 & B_3, B1 & B2 
-    dB_2dt <- r*B_2*(1- (B_1 + B_2 + alpha*B_3 - alpha_c*B_1)) + f_2/k
+    dB_2dt <- r*B_2*(1- (B_1 + B_2 + alpha*B_3 - alpha_c*B_1)) + f_2
     # competition between B_3 & B_3, B2 & B_3, B1 & B_3 
     # f3 is the input of B_3 from environment
-    dB_3dt <- r*B_3*(1- (B_3 + alpha*(B_1 + B_2))) + f_3/k
+    dB_3dt <- r*B_3*(1- (B_3 + alpha*(B_1 + B_2))) + f_3
     
     return(list(c(dB_1dt,dB_2dt,dB_3dt)))
   })}
@@ -33,10 +39,10 @@ quasi_model <- function(t,y,p){
   with(as.list(p),{
     # the grow rate of B2 related to solid food consumption
     # competition between B2 & B2, B2 & B_3 
-    dB_2dt <- r*B_2*(1- B_2 - alpha*B_3) + f_2/k
+    dB_2dt <- r*B_2*(1- B_2 - alpha*B_3) + f_2
     # competition between B_3 & B_3, B2 & B_3, B1 & B_3 
     # f3 is the input of B_3 from environment
-    dB_3dt <- r*B_3*(1 - B_3 - alpha* B_2) + f_3/k
+    dB_3dt <- r*B_3*(1 - B_3 - alpha* B_2) + f_3
     
     return(list(c(dB_2dt,dB_3dt)))
   })}
@@ -59,7 +65,7 @@ alpha_c <- 1.7
 k <- 1000
 
 # input of bacteria 
-f_2 <- 30; f_3 <- 50; f_z<- 10
+f_2 <- 30/k; f_3 <- 50/k; f_z<- 10/k
 
 # varying alpha to check accuracy
 seq_alpha <- seq(0,3,0.02)
@@ -202,7 +208,8 @@ full_quasi_alpha <- ggarrange(plot_v, plot_c,
 
 show(full_quasi_alpha)
 
-ggsave(file = "full_and_quasi_equilibira_gainst_alpha.pdf",width = 17, height = 8.5, units = "cm")
+ggsave(file = output_plot_alpha, width = 17, height = 8.5, units = "cm")
+
 
 
 # effect of h -----------
@@ -222,7 +229,7 @@ alpha_c <- 1.7
 k <- 1000
 
 # input of bacteria 
-f_2 <- 30; f_3 <- 50; f_z<- 10
+f_2 <- 30/k; f_3 <- 50/k; f_z<- 10/k
 
 
 # initial value of h
@@ -305,10 +312,6 @@ repeat {
 
 
 
-save(df_h_c,file = "full_quasi_h_csection.rData")
-save(df_h_v,file = "full_quasi_h_vaginal.rData")
-
-
 
 
 # plot full vs quasi against h ---------------
@@ -321,8 +324,8 @@ library(scales)
 library(tidyr)
 
 # load data 
-load("full_quasi_h_csection.rData")
-load("full_quasi_h_vaginal.rData")
+# load("full_quasi_h_csection.rData")
+# load("full_quasi_h_vaginal.rData")
 
 
 # get data frame ready for ggplot 
@@ -377,5 +380,5 @@ full_quasi_h <- ggarrange(plot_v, plot_c,
 
 show(full_quasi_h)
 
-ggsave(file = "full_and_quasi_equilibira_against_h.pdf",width = 17, height = 8.5, units = "cm")
+ggsave(file = output_plot_h, width = 17, height = 8.5, units = "cm")
 

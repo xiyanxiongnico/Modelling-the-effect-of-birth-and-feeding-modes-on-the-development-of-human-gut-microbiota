@@ -1,6 +1,16 @@
 # This file contains scripts used to generate plots for the competition model and the extended model. 
 
+# set directories for plots 
+
+output_initial_conditions <- "plots/initial_conditions_competition_model.pdf"
+output_feeding_extendedModel <- "plots/f_z_h_compareBirthMode.pdf"
+output_nullclines <- "plots/nullclines.pdf"
+
 # plot effect of initial condition for competition model  ----------------------------------------
+
+# load data 
+load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/initial conditions.rdata")
+
 
 library(ggplot2)
 
@@ -20,7 +30,6 @@ library(tidyr)
 # to access break formatting functions
 library(scales) 
 
-load("initial conditions.rdata")
 
 df_initial$new <- (df_initial$B_2_init+df_initial$B_1_init)/df_initial$B_3_init
 colnames(df_initial)[colnames(df_initial)=="new"] <- "ratio"
@@ -43,12 +52,20 @@ initialconditions_plot <-  ggplot(data = df_long, aes(x = ratio, y = values, col
 
 show(initialconditions_plot)
 
-ggsave(file="initial_conditions_competition_model.pdf",width = 12, height = 8.5, units = "cm")
+ggsave(file= output_initial_conditions, width = 12, height = 8.5, units = "cm")
 
 
 
 
-# Plot effect of breast milk in the extended model -----------------------------------------------
+# Plot effect of feeding practices in the extended model -----------------------------------------------
+
+# load data 
+load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/f_z vaginal.rdata")
+load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/f_z c-section.rdata")
+load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/h_vaginal.rdata")
+load("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/data generation/data/h_c-section.rData.rdata")
+
+
 library(tidyr)
 # to access break formatting functions
 library(scales) 
@@ -65,7 +82,6 @@ mytheme <- theme_bw() +
         legend.position = "none") 
 
 # plot f_z
-load("f_z vaginal.rdata")
 df_long <- gather(df_fz,Variables,Values,B_2:M,factor_key=TRUE)
 #source("myTheme.R")
 f_z_vaginal <-  ggplot(data = df_long, aes(x = f_z, y = Values)) + 
@@ -92,7 +108,6 @@ f_z_vaginal <-  ggplot(data = df_long, aes(x = f_z, y = Values)) +
 show(f_z_vaginal)
 
 
-load("f_z c-section.rdata")
 df_long <- gather(df_fz,Variables,Values,B_2:M,factor_key=TRUE)
 #source("myTheme.R")
 library(ggplot2)
@@ -121,7 +136,7 @@ show(f_z_c_section)
 
 
 # plot h
-load("h_vaginal.rData")
+
 df_long <- gather(df_h,Variables,Values,B_2:M,factor_key=TRUE)
 library(ggplot2)
 h_vaginal <-  ggplot(data = df_long, aes(x = h, y = Values)) + 
@@ -144,7 +159,7 @@ h_vaginal <-  ggplot(data = df_long, aes(x = h, y = Values)) +
 
 show(h_vaginal)
 
-load("h_c-section.rData")
+
 df_long <- gather(df_h,Variables,Values,B_2:M,factor_key=TRUE)
 library(ggplot2)
 h_c_section <-  ggplot(data = df_long, aes(x = h, y = Values)) + 
@@ -173,7 +188,7 @@ f_z_h_compareBirthMode <- ggarrange(f_z_vaginal, f_z_c_section,h_vaginal, h_c_se
                                 labels = c("A", "B","C","D"), nrow = 2, ncol = 2)
 
 show(f_z_h_compareBirthMode)
-ggsave(file="f_z_h_compareBirthMode.pdf",width = 17, height = 17, units = "cm")
+ggsave(file = output_feeding_extendedModel, width = 17, height = 17, units = "cm")
 
 
 
@@ -183,8 +198,8 @@ library(png)
 library(grid)
 library(cowplot)
 
-img1 <- readPNG("nullcline_1.png")
-img2 <- readPNG("nullcline_2.png")
+img1 <- readPNG("plots/nullcline_1.png")
+img2 <- readPNG("plots/nullcline_2.png")
 g1 <- rasterGrob(img1, interpolate=TRUE)
 g2 <- rasterGrob(img2, interpolate=TRUE)
 
@@ -193,7 +208,7 @@ df <- data.frame(x=1:10,y=1:10)
 p1 <- ggplot(df) + annotation_custom(g1, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + theme_minimal()
 p2 <- ggplot(df) + annotation_custom(g2, xmin=-Inf, xmax=Inf, ymin=-Inf, ymax=Inf) + theme_minimal()
 
-pdf("nullclines.pdf", width = 17, height = 8.5)
+pdf(output_nullclines, width = 17, height = 8.5)
 
 plot_grid(p1,p2, labels = "AUTO",label_size = 24, scale = 0.9)
 dev.off()

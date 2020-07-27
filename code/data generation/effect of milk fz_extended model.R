@@ -1,6 +1,11 @@
 # This script generates the equilibria of the extended model against various breast milk levels. 
 
-source("extended model.R")
+# call extended model
+source("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/model/extended model.R")
+
+# set directory to store data 
+output_fz_c_section <- "data/f_z c-section.rData"
+output_fz_vaginal <- "data/f_z vaginal.rData"
 
 # make an empty dataframe 
 df_fz <- data.frame()
@@ -51,10 +56,10 @@ repeat {
   
   
   # initial conditions for vaginal
-   y0 <- c(B_1 = 50/k, B_2 = 50/k, B_3 = 1/k, M = 1/k) 
+  # y0 <- c(B_1 = 50/k, B_2 = 50/k, B_3 = 1/k, M = 1/k) 
   
   # initial conditions for c-section
-  # y0 <- c(B_1 = 1/k, B_2 = 1/k, B_3 = 50/k, M = 1/k) 
+   y0 <- c(B_1 = 1/k, B_2 = 1/k, B_3 = 50/k, M = 1/k) 
   
   # times
   times <- seq(0,1000,1)
@@ -78,6 +83,6 @@ repeat {
   }
 }
 
-#save(df_fz,file = "f_z c-section.rData")
-save(df_fz,file = "f_z vaginal.rData")
+save(df_fz,file = output_fz_c_section)
+#save(df_fz,file = output_fz_vaginal)
 

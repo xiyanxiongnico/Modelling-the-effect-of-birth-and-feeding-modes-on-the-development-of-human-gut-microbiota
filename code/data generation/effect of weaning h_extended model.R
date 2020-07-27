@@ -1,6 +1,11 @@
 # This script generates the equilibria of the extended model against a range of weaning schedules. 
 
-source("extended model.R")
+# call extended model
+source("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/model/extended model.R")
+
+# set directory to store data 
+output_h_c_section <- "data/h_c-section.rData"
+output_h_vaginal <- "data/h_vaginal.rData"
 
 # make an empty dataframe 
 df_h <- data.frame()
@@ -43,10 +48,10 @@ repeat {
   
   
   # initial conditions for c-section
-   y0 <- c(B_1 = 1/k,B_2 = 1/k,B_3 = 50/k, M = 1/k) 
+  # y0 <- c(B_1 = 1/k,B_2 = 1/k,B_3 = 50/k, M = 1/k) 
   
   # initial conditions for vaginal birth
-  # y0 <- c(B_1 = 50/k,B_2 = 50/k,B_3 = 1/k, M = 1/k) 
+   y0 <- c(B_1 = 50/k,B_2 = 50/k,B_3 = 1/k, M = 1/k) 
   
   # times
   times <- seq(0,4000,1)
@@ -72,6 +77,6 @@ repeat {
   }
 }
 
- save(df_h,file = "h_c-section.rData")
- #save(df_h,file = "h_vaginal.rData")
+ #save(df_h,file = output_h_c_section)
+ save(df_h,file = output_h_vaginal)
 

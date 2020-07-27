@@ -1,6 +1,10 @@
 # This script generates the equilibria of the competition model against a range of initial conditions. 
 
-source("competition model.R")
+# call competition model
+source("~/Documents/GitHub/Modelling-the-effect-of-birth-and-feeding-modes-on-the-development-of-human-gut-microbiota/code/model/competition model.R")
+
+# set directory to store the generated data 
+output_initial_conditions <- "data/initial conditions.rData"
 
 # make an empty dataframe 
 df_initial <- data.frame()
@@ -23,7 +27,7 @@ alpha_c <- 1.7
 k <- 1000
 
 # input of bacteria 
-f_2 <- 39/k; f_3 <- 50/k; f_z<- 10/k
+f_2 <- 30/k; f_3 <- 50/k; f_z<- 10/k
 
 
 # get a sequence of initial conditions 
@@ -68,7 +72,7 @@ repeat {
   }
 }
 
-save(df_initial,file = "initial conditions.rData")
+save(df_initial,file = output_initial_conditions)
 
 
 
